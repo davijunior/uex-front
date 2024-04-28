@@ -1,23 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Login from './Components/Login';
+import { Container } from'react-bootstrap';
+import Header from './Components/Header';
+import Contacts from './Components/Contacts';
+import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
+  const isAuthenticated = sessionStorage.getItem('token');
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header Auth={isAuthenticated}></Header>
+      <Container>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<Contacts />} />
+          <Route exact path="/login" element={<Login />} />
+          <Route render={() => isAuthenticated ? <Contacts /> : <Navigate to="/login" replace={true} />} />
+        </Routes>
+      </Router>
+      </Container>
     </div>
   );
 }
